@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Давид Шатон — маркетолог и разработчик полного цикла</title>
+<meta name="description" content="Давид Шатон — маркетолог и разработчик. Сайты, приложения, трафик, соцсети и системы под ключ.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230a0f0c%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22%23b6ff3c%22 font-family=%22monospace%22>D</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="grain"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="scanline"></div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <a href="#top" class="logo">
+    <span class="logo-bracket">[</span>DAVID_SHATON<span class="logo-bracket">]</span>
+    <span class="logo-cursor">_</span>
+  </a>
+  <nav class="main-nav">
+    <a href="#about" data-magnetic>обо мне</a>
+    <a href="#services" data-magnetic>что делаю</a>
+    <a href="#projects" data-magnetic>проекты</a>
+    <a href="#process" data-magnetic>процесс</a>
+    <a href="#contact" data-magnetic>контакты</a>
+  </nav>
+  <button class="terminal-toggle" id="terminalToggle" data-magnetic>
+    <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+    <span>терминал</span>
+  </button>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <p class="eyebrow"><span class="blink-dot"></span> system status: online — принимаю новые проекты</p>
+    <h1 class="hero-title">
+      Полный цикл.<br>
+      От <span class="ink">идеи</span> до <span class="ink ink-alt">клиентов</span>.
+    </h1>
+    <p class="hero-lead">
+      Я маркетолог и разработчик в одном лице. Делаю сайты и приложения,
+      настраиваю трафик, веду соцсети и строю системы, в которых заявки
+      не теряются — а бизнес растёт без ручного контроля каждой мелочи.
+    </p>
+    <div class="hero-terminal-line">
+      <span class="prompt">davidshaton@work</span><span class="colon">:</span><span class="path">~</span><span class="colon">$</span>
+      <span id="typedLine" class="typed"></span><span class="type-cursor">▍</span>
+    </div>
+    <div class="hero-cta">
+      <a href="https://t.me/error_090" target="_blank" rel="noopener" class="btn btn-primary" data-magnetic>
+        Написать в Telegram <span class="arrow">→</span>
+      </a>
+      <button class="btn btn-ghost" id="heroTerminalBtn" data-magnetic>
+        Открыть терминал <span class="kbd">⌐</span>
+      </button>
+    </div>
+  </div>
+  <div class="hero-tags">
+    <span>#авито</span><span>#pwa</span><span>#яндекс.директ</span><span>#seo</span>
+    <span>#telegram-боты</span><span>#crm</span><span>#контент</span><span>#автоматизация</span>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section about" id="about">
+  <div class="section-head">
+    <span class="section-index">01</span>
+    <h2>Обо мне</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <div class="photo-frame">
+        <div class="photo-placeholder" aria-hidden="true">
+          <span>D</span>
+        </div>
+        <div class="photo-tag">// давид шатон</div>
+      </div>
+      <p class="photo-caption">Замените <code>assets/avatar.jpg</code> своим фото — рамка подстроится автоматически.</p>
+    </div>
+    <div class="about-text">
+      <p>
+        Я не узкий специалист, который отвечает только за баннер или только за код.
+        Я закрываю весь маркетинг в одном лице — от создания сайта или приложения
+        до настройки рекламы и ведения соцсетей. Клиент приходит с задачей — уходит
+        с системой, которая работает без него.
+      </p>
+      <p>
+        За плечами — проекты в разных нишах: эко-курорт «Романтик», платформа
+        совместных покупок SHAREVO, центр выкупа недвижимости, десятки бизнесов
+        на Авито. Знаю продукт изнутри — от алгоритма ранжирования Ranker&nbsp;3
+        до того, почему клиент не отвечает на третье сообщение в директе.
+      </p>
+      <div class="about-stats">
+        <div class="stat">
+          <span class="stat-value">4-в-1</span>
+          <span class="stat-label">разработка · трафик · SMM · аналитика</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">0</span>
+          <span class="stat-label">посредников между вами и результатом</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">100%</span>
+          <span class="stat-label">задач — от идеи до сдачи, лично</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section services" id="services">
+  <div class="section-head">
+    <span class="section-index">02</span>
+    <h2>Что я делаю</h2>
+  </div>
+  <div class="cards-grid">
+    <article class="tilt-card" data-tilt>
+      <div class="tilt-inner">
+        <span class="card-index">01</span>
+        <h3>Создаю с нуля</h3>
+        <p>Сайты и лендинги, мобильные и PWA-приложения, Telegram-боты,
+        системы бронирования — под конкретную задачу, без лишнего.</p>
+        <ul class="card-tags">
+          <li>сайты</li><li>PWA</li><li>боты</li><li>бронирование</li>
+        </ul>
+      </div>
+    </article>
+    <article class="tilt-card" data-tilt>
+      <div class="tilt-inner">
+        <span class="card-index">02</span>
+        <h3>Привожу трафик</h3>
+        <p>Яндекс Директ, SEO-продвижение, Авито (алгоритм Ranker&nbsp;3 знаю
+        изнутри), таргет. Не просто запускаю — слежу за CPL и оптимизирую.</p>
+        <ul class="card-tags">
+          <li>директ</li><li>seo</li><li>авито</li><li>таргет</li>
+        </ul>
+      </div>
+    </article>
+    <article class="tilt-card" data-tilt>
+      <div class="tilt-inner">
+        <span class="card-index">03</span>
+        <h3>Упаковываю и веду соцсети</h3>
+        <p>Контент-стратегия, Reels, карусели, Instagram, ВКонтакте.
+        Делаю визуал, пишу тексты, выстраиваю воронку.</p>
+        <ul class="card-tags">
+          <li>контент</li><li>reels</li><li>карусели</li><li>воронка</li>
+        </ul>
+      </div>
+    </article>
+    <article class="tilt-card" data-tilt>
+      <div class="tilt-inner">
+        <span class="card-index">04</span>
+        <h3>Строю систему целиком</h3>
+        <p>Аналитика, CRM, автоответы, скрипты, автоматизация. Чтобы заявки
+        не терялись, а бизнес работал без ручного контроля каждой детали.</p>
+        <ul class="card-tags">
+          <li>crm</li><li>аналитика</li><li>автоматизация</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section projects" id="projects">
+  <div class="section-head">
+    <span class="section-index">03</span>
+    <h2>Проекты</h2>
+  </div>
+  <div class="projects-list">
+    <article class="project-row" data-tilt>
+      <div class="project-meta">
+        <span class="project-num">/ 01</span>
+        <span class="project-tag">гостиничный бизнес · PWA</span>
+      </div>
+      <h3>База отдыха «Романтик»</h3>
+      <p>Приложение для бронирования домиков и PWA-версия сайта: клиент
+      выбирает даты, оплачивает и получает подтверждение без звонков
+      администратору. Плюс продвижение самой базы отдыха.</p>
+      <div class="project-stack">
+        <span>PWA</span><span>Бронирование</span><span>UX</span><span>Продвижение</span>
+      </div>
+    </article>
+    <article class="project-row" data-tilt>
+      <div class="project-meta">
+        <span class="project-num">/ 02</span>
+        <span class="project-tag">маркетплейс · платформа</span>
+      </div>
+      <h3>SHAREVO</h3>
+      <p>Платформа совместных покупок — люди объединяются, чтобы купить
+      товар оптом дешевле. Разработка логики платформы, упаковка продукта
+      и стратегия привлечения первых пользователей.</p>
+      <div class="project-stack">
+        <span>Продукт</span><span>Платформа</span><span>Growth</span>
+      </div>
+    </article>
+    <article class="project-row" data-tilt>
+      <div class="project-meta">
+        <span class="project-num">/ 03</span>
+        <span class="project-tag">недвижимость · контент</span>
+      </div>
+      <h3>Центр выкупа недвижимости</h3>
+      <p>Упаковка соцсетей: карусели и визуал для Instagram и ВКонтакте,
+      которые объясняют сложную услугу выкупа простым языком и приносят
+      заявки напрямую из соцсетей.</p>
+      <div class="project-stack">
+        <span>Карусели</span><span>SMM</span><span>Заявки</span>
+      </div>
+    </article>
+    <article class="project-row" data-tilt>
+      <div class="project-meta">
+        <span class="project-num">/ 04</span>
+        <span class="project-tag">авито · трафик</span>
+      </div>
+      <h3>Авито-направление</h3>
+      <p>Ведение и оптимизация объявлений для десятков бизнесов: работа
+      с алгоритмом Ranker&nbsp;3, CPL-контроль, тестирование офферов
+      и заголовков на реальном трафике.</p>
+      <div class="project-stack">
+        <span>Авито</span><span>Ranker 3</span><span>CPL</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section process" id="process">
+  <div class="section-head">
+    <span class="section-index">04</span>
+    <h2>Как строится работа</h2>
+  </div>
+  <ol class="process-list">
+    <li><span class="step-num">01</span><div><h4>Разбор задачи</h4><p>Анализирую нишу, конкурентов, аудиторию и текущую точку, в которой находится бизнес.</p></div></li>
+    <li><span class="step-num">02</span><div><h4>План</h4><p>Предлагаю чёткий план с конкретными шагами и сроками — без воды и «посмотрим по ходу».</p></div></li>
+    <li><span class="step-num">03</span><div><h4>Реализация</h4><p>Делаю сам, без посредников и потери смысла на этапе передачи между исполнителями.</p></div></li>
+    <li><span class="step-num">04</span><div><h4>Запуск трафика</h4><p>Слежу за цифрами в реальном времени и корректирую кампании на лету.</p></div></li>
+    <li><span class="step-num">05</span><div><h4>Сдача с аналитикой</h4><p>Показываю, что сработало и почему — понятным языком, без дашбордов ради дашбордов.</p></div></li>
+  </ol>
+</section>
+
+<!-- ============ NICHES ============ -->
+<section class="section niches">
+  <div class="section-head">
+    <span class="section-index">05</span>
+    <h2>Ниши, с которыми работал</h2>
+  </div>
+  <div class="niche-cloud">
+    <span data-magnetic>Авито-услуги</span>
+    <span data-magnetic>Товарный бизнес</span>
+    <span data-magnetic>Гостиничный бизнес</span>
+    <span data-magnetic>Туризм</span>
+    <span data-magnetic>Недвижимость</span>
+    <span data-magnetic>B2B</span>
+    <span data-magnetic>Локальный бизнес</span>
+    <span data-magnetic>E-commerce</span>
+    <span data-magnetic>Стартапы</span>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section contact" id="contact">
+  <div class="section-head">
+    <span class="section-index">06</span>
+    <h2>Связаться</h2>
+  </div>
+  <p class="contact-lead">Опишите задачу — отвечу и предложу, с чего начать. Быстрее всего — в Telegram или WhatsApp.</p>
+
+  <div class="contact-grid">
+    <a class="contact-card" href="https://t.me/error_090" target="_blank" rel="noopener" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21.5 3.5 2.7 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.5 0 .7-.2 1-.5l2.4-2.3 5 3.6c.9.5 1.5.2 1.7-.9l3.1-14.7c.3-1.3-.5-1.9-1.7-1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.1 13.9 18 7.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </span>
+      <span class="contact-name">Telegram</span>
+      <span class="contact-handle">@error_090</span>
+    </a>
+
+    <a class="contact-card" href="https://wa.me/79183280452" target="_blank" rel="noopener" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M17.6 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.5-3-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.6-.4Z" fill="currentColor"/><path d="M12 21a9 9 0 1 0-7.8-4.5L3 21l4.6-1.2A9 9 0 0 0 12 21Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="contact-name">WhatsApp</span>
+      <span class="contact-handle">+7 918 328-04-52</span>
+    </a>
+
+    <a class="contact-card" href="https://max.ru/u/f9LHodD0cOKjKl1-NABs7Yp0WEn2eO1a9sJrIswN4yPeTUkqg1WSs3SJB8I" target="_blank" rel="noopener" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C7 3 3 6.6 3 11c0 2.4 1.2 4.6 3.2 6.1-.1.9-.5 2.3-1.4 3.4 1.6-.2 3.3-.9 4.5-1.7 .9.2 1.8.3 2.7.3 5 0 9-3.6 9-8S17 3 12 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8.3" cy="11" r="1.1" fill="currentColor"/><circle cx="12" cy="11" r="1.1" fill="currentColor"/><circle cx="15.7" cy="11" r="1.1" fill="currentColor"/></svg>
+      </span>
+      <span class="contact-name">MAX</span>
+      <span class="contact-handle">Давид Шатон</span>
+    </a>
+
+    <a class="contact-card" href="tel:+79183280452" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.3 2.6 3.4 4.7 6 6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.5c0-.6.4-1 1-1h3.8c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1l-2.6 1.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="contact-name">Телефон</span>
+      <span class="contact-handle">+7 918 328-04-52</span>
+    </a>
+
+    <a class="contact-card" href="https://www.instagram.com/davidshaton" target="_blank" rel="noopener" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
+      </span>
+      <span class="contact-name">Instagram</span>
+      <span class="contact-handle">@davidshaton</span>
+    </a>
+
+    <button class="contact-card contact-card-cta" id="ctaTerminalBtn" data-magnetic data-tilt>
+      <span class="contact-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M7 9l3 3-3 3M13 15h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="contact-name">Терминал</span>
+      <span class="contact-handle">введите help</span>
+    </button>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <p>© 2026 Давид Шатон · собрано вручную, без шаблонов</p>
+  <p class="footer-status"><span class="blink-dot"></span> ждёт новую задачу</p>
+</footer>
+
+<!-- ============ TERMINAL OVERLAY ============ -->
+<div class="terminal-overlay" id="terminalOverlay" aria-hidden="true">
+  <div class="terminal-window">
+    <div class="terminal-titlebar">
+      <div class="tb-dots">
+        <span class="dot dot-red" id="terminalClose"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+      </div>
+      <span class="tb-title">david@portfolio: ~</span>
+      <span class="tb-spacer"></span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <p class="term-line">Добро пожаловать. Это интерактивная визитка Давида Шатона.</p>
+      <p class="term-line">Введите <span class="term-hl">help</span>, чтобы увидеть список команд.</p>
+    </div>
+    <div class="terminal-input-row">
+      <span class="prompt">davidshaton@work</span><span class="colon">:</span><span class="path">~</span><span class="colon">$</span>
+      <input type="text" id="terminalInput" autocomplete="off" spellcheck="false" autocapitalize="off">
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
