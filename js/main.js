@@ -67,37 +67,29 @@
     });
   }
 
-  /* ---------------- hero typed line ---------------- */
-  const typedEl = document.getElementById('typedLine');
-  const lines = [
-    'whoami',
-    './build.sh --stack=marketing+dev --output=результат',
-    'echo "принимаю новые проекты"',
+  /* ---------------- hero ticker (fixed height, no reflow) ---------------- */
+  const ticker = document.getElementById('tickerViewport');
+  const tickerLines = [
+    'принимаю новые проекты',
+    'отвечаю в течение часа',
+    'сайты, реклама и соцсети — один исполнитель',
+    'работаю по всей России удалённо',
   ];
-  let li = 0, ci = 0, deleting = false;
-
-  function typeLoop() {
-    if (!typedEl) return;
-    const full = lines[li];
-    if (!deleting) {
-      ci++;
-      typedEl.textContent = full.slice(0, ci);
-      if (ci === full.length) {
-        deleting = true;
-        setTimeout(typeLoop, 1600);
-        return;
-      }
-    } else {
-      ci--;
-      typedEl.textContent = full.slice(0, ci);
-      if (ci === 0) {
-        deleting = false;
-        li = (li + 1) % lines.length;
-      }
-    }
-    setTimeout(typeLoop, deleting ? 28 : 46);
+  if (ticker) {
+    tickerLines.forEach((text, i) => {
+      const span = document.createElement('span');
+      span.className = 'ticker-item' + (i === 0 ? ' active' : '');
+      span.textContent = text;
+      ticker.appendChild(span);
+    });
+    let ti = 0;
+    setInterval(() => {
+      const items = ticker.querySelectorAll('.ticker-item');
+      items[ti].classList.remove('active');
+      ti = (ti + 1) % items.length;
+      items[ti].classList.add('active');
+    }, 3200);
   }
-  typeLoop();
 
   /* ---------------- canvas network background ---------------- */
   const canvas = document.getElementById('bg-canvas');
@@ -176,141 +168,58 @@
   revealTargets.forEach((el) => io.observe(el));
 
   /* =========================================================
-     TERMINAL EASTER EGG
+     QR BUSINESS CARD — signature feature
+     A physical-business-card metaphor everyone already knows:
+     tap to flip, scan the QR with a phone camera, or save the
+     contact straight to the phone. No jargon required.
      ========================================================= */
-  const overlay = document.getElementById('terminalOverlay');
-  const body = document.getElementById('terminalBody');
-  const input = document.getElementById('terminalInput');
+  const cardOverlay = document.getElementById('cardOverlay');
+  const flipCard = document.getElementById('flipCard');
+  const cardClose = document.getElementById('cardClose');
+  const qrImage = document.getElementById('qrImage');
+  const saveContactBtn = document.getElementById('saveContactBtn');
   const openers = [
-    document.getElementById('terminalToggle'),
-    document.getElementById('heroTerminalBtn'),
-    document.getElementById('ctaTerminalBtn'),
+    document.getElementById('cardToggle'),
+    document.getElementById('heroCardBtn'),
+    document.getElementById('ctaCardBtn'),
   ].filter(Boolean);
-  const closeBtn = document.getElementById('terminalClose');
 
-  function openTerminal() {
-    overlay.classList.add('open');
-    overlay.setAttribute('aria-hidden', 'false');
-    setTimeout(() => input.focus(), 150);
-  }
-  function closeTerminal() {
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden', 'true');
-  }
-  openers.forEach((btn) => btn.addEventListener('click', openTerminal));
-  closeBtn.addEventListener('click', closeTerminal);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeTerminal(); });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeTerminal();
-    if (e.key === '`' && !overlay.classList.contains('open')) { e.preventDefault(); openTerminal(); }
-  });
-
-  function print(html, cls = '') {
-    const p = document.createElement('p');
-    p.className = `term-line ${cls}`;
-    p.innerHTML = html;
-    body.appendChild(p);
-    body.scrollTop = body.scrollHeight;
-  }
-
-  const ASCII = `
- ____             _     _
-|  _ \\  __ ___   _(_) __| |
-| | | |/ _\` \\ \\ / / |/ _\` |
-| |_| | (_| |\\ V /| | (_| |
-|____/ \\__,_| \\_/ |_|\\__,_|
-  маркетолог · разработчик`;
-
-  const COMMANDS = {
-    help() {
-      print(`Доступные команды:`);
-      print(`  <span class="term-hl">whoami</span>       — кто я и чем занимаюсь`);
-      print(`  <span class="term-hl">about</span>        — коротко обо мне`);
-      print(`  <span class="term-hl">skills</span>       — стек и услуги`);
-      print(`  <span class="term-hl">projects</span>     — список проектов`);
-      print(`  <span class="term-hl">contact</span>      — все контакты`);
-      print(`  <span class="term-hl">open</span> &lt;tg|wa|max|ig|phone&gt; — открыть контакт`);
-      print(`  <span class="term-hl">sudo hire-me</span> — не пытайтесь, просто напишите :)`);
-      print(`  <span class="term-hl">clear</span>        — очистить экран`);
-    },
-    whoami() {
-      print(`<pre style="margin:0;color:var(--acid);font-size:11px;line-height:1.3">${ASCII}</pre>`);
-      print(`Давид Шатон — маркетолог и разработчик полного цикла.`);
-      print(`Делаю сайты, приложения, трафик, соцсети и системы. Один человек, весь маркетинг.`);
-    },
-    about() {
-      print(`Закрываю маркетинг в одном лице: от идеи и кода до рекламы и контента.`);
-      print(`Работал с эко-курортом «Романтик», платформой SHAREVO, центром выкупа`);
-      print(`недвижимости и десятками бизнесов на Авито. Знаю Ranker 3 изнутри.`);
-    },
-    skills() {
-      print(`<span class="term-hl">Разработка:</span> сайты, лендинги, PWA, Telegram-боты, бронирование`);
-      print(`<span class="term-hl">Трафик:</span> Яндекс Директ, SEO, Авито, таргет`);
-      print(`<span class="term-hl">Контент:</span> Reels, карусели, Instagram, ВКонтакте`);
-      print(`<span class="term-hl">Система:</span> CRM, аналитика, автоответы, автоматизация`);
-    },
-    projects() {
-      print(`<span class="term-hl">01</span> База отдыха «Романтик»       — PWA + бронирование`);
-      print(`<span class="term-hl">02</span> SHAREVO                      — платформа совместных покупок`);
-      print(`<span class="term-hl">03</span> Центр выкупа недвижимости    — карусели, SMM, заявки`);
-      print(`<span class="term-hl">04</span> Авито-направление            — Ranker 3, CPL, трафик`);
-      print(`Подробнее — секция <span class="term-hl">#projects</span> на странице.`);
-    },
-    contact() {
-      print(`Telegram   → <a class="term-link" href="${CONTACTS.telegram}" target="_blank" rel="noopener">@error_090</a>`);
-      print(`WhatsApp   → <a class="term-link" href="${CONTACTS.whatsapp}" target="_blank" rel="noopener">+7 918 328-04-52</a>`);
-      print(`MAX        → <a class="term-link" href="${CONTACTS.max}" target="_blank" rel="noopener">Давид Шатон</a>`);
-      print(`Телефон    → <a class="term-link" href="${CONTACTS.phone}">+7 918 328-04-52</a>`);
-      print(`Instagram  → <a class="term-link" href="${CONTACTS.instagram}" target="_blank" rel="noopener">@davidshaton</a>`);
-    },
-    open(arg) {
-      const map = { tg: 'telegram', telegram: 'telegram', wa: 'whatsapp', whatsapp: 'whatsapp', max: 'max', ig: 'instagram', instagram: 'instagram', phone: 'phone', tel: 'phone' };
-      const key = map[(arg || '').toLowerCase()];
-      if (!key) { print(`Использование: open &lt;tg|wa|max|ig|phone&gt;`, 'term-err'); return; }
-      print(`Открываю ${key}...`);
-      window.open(CONTACTS[key], key === 'phone' ? '_self' : '_blank');
-    },
-    clear() {
-      body.innerHTML = '';
-    },
-    sudo(arg) {
-      if ((arg || '').toLowerCase().includes('hire-me')) {
-        print(`Permission granted. Просто напишите в Telegram — быстрее, чем sudo.`);
-        print(`→ <a class="term-link" href="${CONTACTS.telegram}" target="_blank" rel="noopener">${CONTACTS.telegram}</a>`);
-      } else {
-        print(`sudo: davidshaton не в списке judoers. Инцидент будет отправлен... шучу, тут никого нет.`, 'term-err');
-      }
-    },
-  };
-
-  function runCommand(raw) {
-    const trimmed = raw.trim();
-    if (!trimmed) return;
-    print(trimmed, 'echo');
-    const [cmd, ...rest] = trimmed.split(/\s+/);
-    const fn = COMMANDS[cmd.toLowerCase()];
-    if (fn) {
-      fn(rest.join(' '));
-    } else {
-      print(`команда не найдена: <span class="term-hl">${cmd}</span>. Введите <span class="term-hl">help</span>.`, 'term-err');
+  if (cardOverlay && flipCard) {
+    const qrData = encodeURIComponent(CONTACTS.whatsapp);
+    if (qrImage) {
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=440x440&margin=0&data=${qrData}`;
     }
-  }
 
-  const history = [];
-  let hIdx = -1;
-  input && input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const val = input.value;
-      runCommand(val);
-      if (val.trim()) { history.push(val); hIdx = history.length; }
-      input.value = '';
-    } else if (e.key === 'ArrowUp') {
-      if (hIdx > 0) { hIdx--; input.value = history[hIdx]; }
-      e.preventDefault();
-    } else if (e.key === 'ArrowDown') {
-      if (hIdx < history.length - 1) { hIdx++; input.value = history[hIdx]; }
-      else { hIdx = history.length; input.value = ''; }
-      e.preventDefault();
+    if (saveContactBtn) {
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:Шатон;Давид;;;',
+        'FN:Давид Шатон',
+        'TITLE:Маркетолог и разработчик',
+        'TEL;TYPE=CELL:+79183280452',
+        'URL:https://davidshaton2006-droid.github.io/portfolio-fullstack/',
+        'END:VCARD',
+      ].join('\n');
+      saveContactBtn.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
     }
-  });
+
+    function openCard() {
+      cardOverlay.classList.add('open');
+      cardOverlay.setAttribute('aria-hidden', 'false');
+      flipCard.classList.remove('flipped');
+    }
+    function closeCard() {
+      cardOverlay.classList.remove('open');
+      cardOverlay.setAttribute('aria-hidden', 'true');
+    }
+    openers.forEach((btn) => btn.addEventListener('click', openCard));
+    cardClose.addEventListener('click', closeCard);
+    cardOverlay.addEventListener('click', (e) => { if (e.target === cardOverlay) closeCard(); });
+    flipCard.addEventListener('click', () => flipCard.classList.toggle('flipped'));
+    flipCard.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => e.stopPropagation()));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeCard();
+    });
+  }
 })();
