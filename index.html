@@ -5,47 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Давид Шатон — маркетолог и разработчик полного цикла</title>
 <meta name="description" content="Давид Шатон — маркетолог и разработчик. Сайты, приложения, трафик, соцсети и системы под ключ.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230a0f0c%22/><text x=%2250%22 y=%2266%22 font-size=%2255%22 text-anchor=%22middle%22 fill=%22%23b6ff3c%22 font-family=%22monospace%22>D</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2212%22 fill=%22%230b1420%22/><rect x=%224%22 y=%224%22 width=%2292%22 height=%2292%22 rx=%228%22 fill=%22none%22 stroke=%22%234fb8ff%22 stroke-width=%223%22 stroke-dasharray=%228 6%22/><text x=%2250%22 y=%2266%22 font-size=%2248%22 text-anchor=%22middle%22 fill=%22%234fb8ff%22 font-family=%22sans-serif%22 font-weight=%22800%22>D</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
-<div class="grain"></div>
+<div class="vignette"></div>
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<div class="scanline"></div>
-
 <!-- ============ HEADER ============ -->
 <header class="site-header">
-  <a href="#top" class="logo">
-    <span class="logo-bracket">[</span>DAVID_SHATON<span class="logo-bracket">]</span>
-    <span class="logo-cursor">_</span>
+  <a href="#top" class="logo-plate" data-magnetic>
+    <span class="logo-mono">ДШ</span>
+    <span class="logo-sub">проект №001 · с 2026</span>
   </a>
   <nav class="main-nav">
-    <a href="#about" data-magnetic>обо мне</a>
-    <a href="#services" data-magnetic>что делаю</a>
-    <a href="#projects" data-magnetic>проекты</a>
-    <a href="#process" data-magnetic>процесс</a>
-    <a href="#contact" data-magnetic>контакты</a>
+    <a href="#about" data-magnetic><i>01</i>обо мне</a>
+    <a href="#machine" data-magnetic><i>02</i>машина</a>
+    <a href="#projects" data-magnetic><i>03</i>проекты</a>
+    <a href="#process" data-magnetic><i>04</i>процесс</a>
+    <a href="#contact" data-magnetic><i>05</i>контакты</a>
   </nav>
-  <button class="terminal-toggle" id="cardToggle" data-magnetic>
+  <button class="card-toggle" id="cardToggle" data-magnetic>
     <span class="card-toggle-icon" aria-hidden="true">▦</span>
-    <span>QR-визитка</span>
+    <span>визитка</span>
   </button>
 </header>
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="top">
   <div class="hero-inner">
-    <p class="eyebrow"><span class="blink-dot"></span> system status: online — принимаю новые проекты</p>
+    <p class="eyebrow"><span class="blink-square"></span> в работе — принимаю новые проекты</p>
     <h1 class="hero-title">
-      Полный цикл.<br>
-      От <span class="ink">идеи</span> до <span class="ink ink-alt">клиентов</span>.
+      ПОЛНЫЙ ЦИКЛ.<br>
+      ОТ <span class="ink ink-underline">ИДЕИ</span><br>
+      ДО <span class="ink-alt ink-underline">КЛИЕНТОВ</span>.
     </h1>
     <p class="hero-lead">
       Я маркетолог и разработчик в одном лице. Делаю сайты и приложения,
@@ -53,16 +52,16 @@
       не теряются — а бизнес растёт без ручного контроля каждой мелочи.
     </p>
     <div class="hero-ticker">
-      <span class="blink-dot"></span>
+      <span class="blink-square"></span>
       <span class="ticker-viewport" id="tickerViewport"></span>
     </div>
     <div class="hero-cta">
       <a href="https://t.me/error_090" target="_blank" rel="noopener" class="btn btn-primary" data-magnetic>
         Написать в Telegram <span class="arrow">→</span>
       </a>
-      <button class="btn btn-ghost" id="heroCardBtn" data-magnetic>
-        Показать QR-визитку <span class="kbd">▦</span>
-      </button>
+      <a href="#machine" class="btn btn-ghost" data-magnetic>
+        Закинуть проблему в машину <span class="kbd">↓</span>
+      </a>
     </div>
   </div>
   <div class="hero-tags">
@@ -118,58 +117,49 @@
   </div>
 </section>
 
-<!-- ============ SERVICES ============ -->
-<section class="section services" id="services">
+<!-- ============ MACHINE — SIGNATURE FEATURE ============ -->
+<section class="section machine-section" id="machine">
   <div class="section-head">
     <span class="section-index">02</span>
-    <h2>Что я делаю</h2>
+    <h2>Закиньте проблему в машину</h2>
   </div>
-  <div class="cards-grid">
-    <article class="tilt-card" data-tilt>
-      <div class="tilt-inner">
-        <span class="card-index">01</span>
-        <h3>Создаю с нуля</h3>
-        <p>Сайты и лендинги, мобильные и PWA-приложения, Telegram-боты,
-        системы бронирования — под конкретную задачу, без лишнего.</p>
-        <ul class="card-tags">
-          <li>сайты</li><li>PWA</li><li>боты</li><li>бронирование</li>
-        </ul>
+  <p class="machine-intro">
+    Перетащите карточку с вашей проблемой в машину — <strong>или просто нажмите на неё</strong>.
+    Машина обработает запрос и выдаст решение.
+  </p>
+
+  <div class="machine-wrap">
+    <div class="chips-tray" id="chipsTray">
+      <button class="chip" data-problem="clients" data-magnetic>Нет клиентов</button>
+      <button class="chip" data-problem="site" data-magnetic>Сайт старый или его нет</button>
+      <button class="chip" data-problem="crm" data-magnetic>Заявки теряются</button>
+      <button class="chip" data-problem="smm" data-magnetic>Соцсети заброшены</button>
+      <button class="chip" data-problem="start" data-magnetic>Не знаю, с чего начать</button>
+    </div>
+
+    <div class="machine" id="machine">
+      <span class="machine-label machine-label-in">вход</span>
+      <div class="machine-funnel"></div>
+      <div class="machine-body" id="machineBody">
+        <div class="machine-gear machine-gear-a"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 5.5-2.1.4a7 7 0 0 1-.6 1.5l1.2 1.8-2 2-1.8-1.2a7 7 0 0 1-1.5.6l-.4 2.1h-2.8l-.4-2.1a7 7 0 0 1-1.5-.6L7.3 19l-2-2 1.2-1.8a7 7 0 0 1-.6-1.5L3.8 13.5v-2.8l2.1-.4a7 7 0 0 1 .6-1.5L5.3 7 7.3 5l1.8 1.2a7 7 0 0 1 1.5-.6L11 3.5h2.8l.4 2.1a7 7 0 0 1 1.5.6L17.5 5l2 2-1.2 1.8a7 7 0 0 1 .6 1.5l2.1.4v2.8Z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></div>
+        <div class="machine-gear machine-gear-b"><svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm9 5.5-2.1.4a7 7 0 0 1-.6 1.5l1.2 1.8-2 2-1.8-1.2a7 7 0 0 1-1.5.6l-.4 2.1h-2.8l-.4-2.1a7 7 0 0 1-1.5-.6L7.3 19l-2-2 1.2-1.8a7 7 0 0 1-.6-1.5L3.8 13.5v-2.8l2.1-.4a7 7 0 0 1 .6-1.5L5.3 7 7.3 5l1.8 1.2a7 7 0 0 1 1.5-.6L11 3.5h2.8l.4 2.1a7 7 0 0 1 1.5.6L17.5 5l2 2-1.2 1.8a7 7 0 0 1 .6 1.5l2.1.4v2.8Z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></div>
+        <span class="machine-plate">МАШИНА ДАВИДА<br>МОДЕЛЬ «ПОЛНЫЙ ЦИКЛ»</span>
+        <div class="machine-light" id="machineLight"></div>
+        <div class="machine-slot" id="machineSlot">⬇</div>
       </div>
-    </article>
-    <article class="tilt-card" data-tilt>
-      <div class="tilt-inner">
-        <span class="card-index">02</span>
-        <h3>Привожу трафик</h3>
-        <p>Яндекс Директ, SEO-продвижение, Авито (алгоритм Ranker&nbsp;3 знаю
-        изнутри), таргет. Не просто запускаю — слежу за CPL и оптимизирую.</p>
-        <ul class="card-tags">
-          <li>директ</li><li>seo</li><li>авито</li><li>таргет</li>
-        </ul>
-      </div>
-    </article>
-    <article class="tilt-card" data-tilt>
-      <div class="tilt-inner">
-        <span class="card-index">03</span>
-        <h3>Упаковываю и веду соцсети</h3>
-        <p>Контент-стратегия, Reels, карусели, Instagram, ВКонтакте.
-        Делаю визуал, пишу тексты, выстраиваю воронку.</p>
-        <ul class="card-tags">
-          <li>контент</li><li>reels</li><li>карусели</li><li>воронка</li>
-        </ul>
-      </div>
-    </article>
-    <article class="tilt-card" data-tilt>
-      <div class="tilt-inner">
-        <span class="card-index">04</span>
-        <h3>Строю систему целиком</h3>
-        <p>Аналитика, CRM, автоответы, скрипты, автоматизация. Чтобы заявки
-        не терялись, а бизнес работал без ручного контроля каждой детали.</p>
-        <ul class="card-tags">
-          <li>crm</li><li>аналитика</li><li>автоматизация</li>
-        </ul>
-      </div>
-    </article>
+      <div class="machine-chute"></div>
+      <span class="machine-label machine-label-out">решение</span>
+    </div>
+
+    <div class="results-tray" id="resultsTray">
+      <p class="results-placeholder" id="resultsPlaceholder">решения будут появляться здесь →</p>
+    </div>
   </div>
+
+  <p class="machine-done" id="machineDone" hidden>
+    Все проблемы решены. Осталось написать —
+    <a href="https://t.me/error_090" target="_blank" rel="noopener" class="btn btn-primary" data-magnetic>Telegram <span class="arrow">→</span></a>
+  </p>
 </section>
 
 <!-- ============ PROJECTS ============ -->
@@ -179,7 +169,7 @@
     <h2>Проекты</h2>
   </div>
   <div class="projects-list">
-    <article class="project-row" data-tilt>
+    <article class="project-row">
       <div class="project-meta">
         <span class="project-num">/ 01</span>
         <span class="project-tag">гостиничный бизнес · PWA</span>
@@ -192,7 +182,7 @@
         <span>PWA</span><span>Бронирование</span><span>UX</span><span>Продвижение</span>
       </div>
     </article>
-    <article class="project-row" data-tilt>
+    <article class="project-row">
       <div class="project-meta">
         <span class="project-num">/ 02</span>
         <span class="project-tag">маркетплейс · платформа</span>
@@ -205,7 +195,7 @@
         <span>Продукт</span><span>Платформа</span><span>Growth</span>
       </div>
     </article>
-    <article class="project-row" data-tilt>
+    <article class="project-row">
       <div class="project-meta">
         <span class="project-num">/ 03</span>
         <span class="project-tag">недвижимость · контент</span>
@@ -218,7 +208,7 @@
         <span>Карусели</span><span>SMM</span><span>Заявки</span>
       </div>
     </article>
-    <article class="project-row" data-tilt>
+    <article class="project-row">
       <div class="project-meta">
         <span class="project-num">/ 04</span>
         <span class="project-tag">авито · трафик</span>
@@ -277,7 +267,7 @@
   <p class="contact-lead">Опишите задачу — отвечу и предложу, с чего начать. Быстрее всего — в Telegram или WhatsApp.</p>
 
   <div class="contact-grid">
-    <a class="contact-card" href="https://t.me/error_090" target="_blank" rel="noopener" data-magnetic data-tilt>
+    <a class="contact-card" href="https://t.me/error_090" target="_blank" rel="noopener" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><path d="M21.5 3.5 2.7 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.5 0 .7-.2 1-.5l2.4-2.3 5 3.6c.9.5 1.5.2 1.7-.9l3.1-14.7c.3-1.3-.5-1.9-1.7-1.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.1 13.9 18 7.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
       </span>
@@ -285,7 +275,7 @@
       <span class="contact-handle">@error_090</span>
     </a>
 
-    <a class="contact-card" href="https://wa.me/79183280452" target="_blank" rel="noopener" data-magnetic data-tilt>
+    <a class="contact-card" href="https://wa.me/79183280452" target="_blank" rel="noopener" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><path d="M17.6 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.5-3-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.6-.4Z" fill="currentColor"/><path d="M12 21a9 9 0 1 0-7.8-4.5L3 21l4.6-1.2A9 9 0 0 0 12 21Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       </span>
@@ -293,7 +283,7 @@
       <span class="contact-handle">+7 918 328-04-52</span>
     </a>
 
-    <a class="contact-card" href="https://max.ru/u/f9LHodD0cOKjKl1-NABs7Yp0WEn2eO1a9sJrIswN4yPeTUkqg1WSs3SJB8I" target="_blank" rel="noopener" data-magnetic data-tilt>
+    <a class="contact-card" href="https://max.ru/u/f9LHodD0cOKjKl1-NABs7Yp0WEn2eO1a9sJrIswN4yPeTUkqg1WSs3SJB8I" target="_blank" rel="noopener" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><path d="M12 3C7 3 3 6.6 3 11c0 2.4 1.2 4.6 3.2 6.1-.1.9-.5 2.3-1.4 3.4 1.6-.2 3.3-.9 4.5-1.7 .9.2 1.8.3 2.7.3 5 0 9-3.6 9-8S17 3 12 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8.3" cy="11" r="1.1" fill="currentColor"/><circle cx="12" cy="11" r="1.1" fill="currentColor"/><circle cx="15.7" cy="11" r="1.1" fill="currentColor"/></svg>
       </span>
@@ -301,7 +291,7 @@
       <span class="contact-handle">Давид Шатон</span>
     </a>
 
-    <a class="contact-card" href="tel:+79183280452" data-magnetic data-tilt>
+    <a class="contact-card" href="tel:+79183280452" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.3 2.6 3.4 4.7 6 6l2-2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4.5c0-.6.4-1 1-1h3.8c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1l-2.6 1.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       </span>
@@ -309,7 +299,7 @@
       <span class="contact-handle">+7 918 328-04-52</span>
     </a>
 
-    <a class="contact-card" href="https://www.instagram.com/davidshaton" target="_blank" rel="noopener" data-magnetic data-tilt>
+    <a class="contact-card" href="https://www.instagram.com/davidshaton" target="_blank" rel="noopener" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor"/></svg>
       </span>
@@ -317,7 +307,7 @@
       <span class="contact-handle">@davidshaton</span>
     </a>
 
-    <button class="contact-card contact-card-cta" id="ctaCardBtn" data-magnetic data-tilt>
+    <button class="contact-card contact-card-cta" id="ctaCardBtn" data-magnetic>
       <span class="contact-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.4"/><path d="M14 14h3v3h-3zM19 14h2M14 19h2M19 19h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
       </span>
@@ -329,7 +319,7 @@
 
 <footer class="site-footer">
   <p>© 2026 Давид Шатон · собрано вручную, без шаблонов</p>
-  <p class="footer-status"><span class="blink-dot"></span> ждёт новую задачу</p>
+  <p class="footer-status"><span class="blink-square"></span> ждёт новую задачу</p>
 </footer>
 
 <!-- ============ QR BUSINESS CARD OVERLAY ============ -->
@@ -350,7 +340,7 @@
       <div class="flip-face flip-back">
         <p class="qr-caption">Наведите камеру телефона на код —<br>откроется чат в WhatsApp</p>
         <div class="qr-box">
-          <img id="qrImage" alt="QR-код для связи в WhatsApp" width="220" height="220" loading="lazy">
+          <img id="qrImage" alt="QR-код для связи в WhatsApp" width="180" height="180" loading="lazy">
         </div>
         <div class="flip-back-actions">
           <a class="btn btn-primary" id="saveContactBtn" download="david-shaton.vcf">
