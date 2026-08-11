@@ -13,10 +13,11 @@
     instagram: 'https://www.instagram.com/davidshaton',
   };
 
+  const isTouch = window.matchMedia('(hover: none)').matches;
+
   /* ---------------- custom cursor ---------------- */
   const dot = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
-  const isTouch = window.matchMedia('(hover: none)').matches;
 
   if (!isTouch && dot && ring) {
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -37,7 +38,6 @@
       el.addEventListener('mouseleave', () => ring.classList.remove('active'));
     });
 
-    /* magnetic pull */
     document.querySelectorAll('[data-magnetic]').forEach((el) => {
       el.addEventListener('mousemove', (e) => {
         const r = el.getBoundingClientRect();
@@ -45,25 +45,7 @@
         const relY = e.clientY - r.top - r.height / 2;
         el.style.transform = `translate(${relX * 0.18}px, ${relY * 0.28}px)`;
       });
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = '';
-      });
-    });
-  }
-
-  /* ---------------- tilt cards ---------------- */
-  if (!isTouch) {
-    document.querySelectorAll('[data-tilt]').forEach((card) => {
-      const target = card.classList.contains('tilt-card') ? card.querySelector('.tilt-inner') : card;
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        target.style.transform = `rotateY(${px * 8}deg) rotateX(${-py * 8}deg) translateZ(0)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        target.style.transform = '';
-      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
     });
   }
 
@@ -91,70 +73,80 @@
     }, 3200);
   }
 
-  /* ---------------- canvas network background ---------------- */
+  /* ---------------- blueprint grid background ---------------- */
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
-  let W, H, nodes = [];
-  const mouse = { x: -9999, y: -9999 };
+  let W, H, dpr;
+  const parallax = { tx: 0, ty: 0, mx: 0, my: 0 };
+  const GRID = 44;
+  let scanY = 0;
 
   function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-    const count = Math.min(70, Math.floor((W * H) / 22000));
-    nodes = Array.from({ length: count }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: (Math.random() - 0.5) * 0.25,
-      r: Math.random() * 1.6 + 0.6,
-    }));
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   window.addEventListener('resize', resize);
-  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-  window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+  if (!isTouch) {
+    window.addEventListener('mousemove', (e) => {
+      parallax.mx = (e.clientX / W - 0.5) * 14;
+      parallax.my = (e.clientY / H - 0.5) * 14;
+    });
+  }
   resize();
 
-  function step() {
-    ctx.clearRect(0, 0, W, H);
-    for (const n of nodes) {
-      n.x += n.vx; n.y += n.vy;
-      if (n.x < 0 || n.x > W) n.vx *= -1;
-      if (n.y < 0 || n.y > H) n.vy *= -1;
+  function drawGrid() {
+    ctx.fillStyle = '#0a121d';
+    ctx.fillRect(0, 0, W, H);
 
-      const dxm = n.x - mouse.x, dym = n.y - mouse.y;
-      const dm = Math.hypot(dxm, dym);
-      if (dm < 140) {
-        const f = (140 - dm) / 140 * 0.6;
-        n.x += (dxm / dm) * f;
-        n.y += (dym / dm) * f;
-      }
-    }
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i], b = nodes[j];
-        const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d < 130) {
-          ctx.strokeStyle = `rgba(186,255,60,${(1 - d / 130) * 0.14})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
-        }
-      }
-    }
-    for (const n of nodes) {
+    parallax.tx += (parallax.mx - parallax.tx) * 0.04;
+    parallax.ty += (parallax.my - parallax.ty) * 0.04;
+
+    ctx.save();
+    ctx.translate(parallax.tx, parallax.ty);
+
+    const offX = ((parallax.tx % GRID) + GRID) % GRID;
+    const offY = ((parallax.ty % GRID) + GRID) % GRID;
+
+    let col = 0;
+    for (let x = -offX; x < W + GRID; x += GRID, col++) {
+      ctx.strokeStyle = col % 5 === 0 ? 'rgba(79,184,255,0.10)' : 'rgba(79,184,255,0.045)';
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.fillStyle = 'rgba(233,239,230,0.5)';
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(x, -20);
+      ctx.lineTo(x, H + 20);
+      ctx.stroke();
     }
-    requestAnimationFrame(step);
+    let row = 0;
+    for (let y = -offY; y < H + GRID; y += GRID, row++) {
+      ctx.strokeStyle = row % 5 === 0 ? 'rgba(79,184,255,0.10)' : 'rgba(79,184,255,0.045)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-20, y);
+      ctx.lineTo(W + 20, y);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    scanY = (scanY + 0.55) % (H + 200);
+    const grad = ctx.createLinearGradient(0, scanY - 100, 0, scanY + 100);
+    grad.addColorStop(0, 'rgba(79,184,255,0)');
+    grad.addColorStop(0.5, 'rgba(79,184,255,0.05)');
+    grad.addColorStop(1, 'rgba(79,184,255,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, scanY - 100, W, 200);
+
+    requestAnimationFrame(drawGrid);
   }
-  step();
+  drawGrid();
 
   /* ---------------- scroll reveal ---------------- */
-  const revealTargets = document.querySelectorAll('.tilt-card, .project-row, .stat, .process-list li');
+  const revealTargets = document.querySelectorAll('.project-row, .stat, .process-list li, .chip, .contact-card');
   revealTargets.forEach((el) => { el.style.opacity = 0; el.style.transform += ' translateY(24px)'; el.style.transition = 'opacity .6s ease, transform .6s ease'; });
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -167,29 +159,143 @@
   }, { threshold: 0.15 });
   revealTargets.forEach((el) => io.observe(el));
 
+  const headIo = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        headIo.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.section-head').forEach((el) => headIo.observe(el));
+
   /* =========================================================
-     QR BUSINESS CARD — signature feature
-     A physical-business-card metaphor everyone already knows:
-     tap to flip, scan the QR with a phone camera, or save the
-     contact straight to the phone. No jargon required.
+     THE MACHINE — signature feature
+     Drag a "problem" chip into the machine (or just tap it) and
+     watch it get processed into a plain-language solution. The
+     physical-machine metaphor needs no explanation for anyone.
+     ========================================================= */
+  const SOLUTIONS = {
+    clients: { text: 'Настрою трафик: Директ + Авито + SEO' },
+    site: { text: 'Соберу новый сайт или PWA под задачу' },
+    crm: { text: 'Внедрю CRM, автоответы и аналитику' },
+    smm: { text: 'Упакую контент: Reels, карусели, посты' },
+    start: { text: 'Бесплатно разберу нишу и дам план' },
+  };
+
+  const chipsTray = document.getElementById('chipsTray');
+  const machine = document.getElementById('machine');
+  const machineBody = document.getElementById('machineBody');
+  const machineLight = document.getElementById('machineLight');
+  const resultsTray = document.getElementById('resultsTray');
+  const resultsPlaceholder = document.getElementById('resultsPlaceholder');
+  const machineDone = document.getElementById('machineDone');
+
+  if (chipsTray && machine) {
+    machineLight.classList.add('idle');
+
+    function machineRect() {
+      return machineBody.getBoundingClientRect();
+    }
+    function pointInRect(x, y, r) {
+      return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+    }
+
+    function solve(chip) {
+      if (chip.classList.contains('solved')) return;
+      const key = chip.dataset.problem;
+      const solution = SOLUTIONS[key];
+      if (!solution) return;
+
+      chip.classList.add('solved');
+      machine.classList.remove('drop-active');
+      machineBody.classList.add('processing');
+      machineLight.classList.remove('idle');
+      machineLight.classList.add('busy');
+
+      setTimeout(() => {
+        machineBody.classList.remove('processing');
+        machineLight.classList.remove('busy');
+        machineLight.classList.add('idle');
+
+        if (resultsPlaceholder) resultsPlaceholder.remove();
+        const result = document.createElement('div');
+        result.className = 'result-chip';
+        result.innerHTML = `<span class="tick">✓</span><span>${solution.text}</span>`;
+        resultsTray.appendChild(result);
+
+        const remaining = chipsTray.querySelectorAll('.chip:not(.solved)').length;
+        if (remaining === 0 && machineDone) {
+          machineDone.hidden = false;
+        }
+      }, 950);
+    }
+
+    /* tap / click fallback — works everywhere, no drag required */
+    chipsTray.querySelectorAll('.chip').forEach((chip) => {
+      let downX = 0, downY = 0, moved = false;
+
+      chip.addEventListener('pointerdown', (e) => {
+        if (chip.classList.contains('solved')) return;
+        downX = e.clientX; downY = e.clientY; moved = false;
+        chip.setPointerCapture(e.pointerId);
+
+        const ghost = document.createElement('div');
+        ghost.className = 'chip-ghost';
+        ghost.textContent = chip.textContent;
+        document.body.appendChild(ghost);
+        ghost.style.left = e.clientX + 'px';
+        ghost.style.top = e.clientY + 'px';
+        chip.classList.add('dragging');
+
+        function onMove(ev) {
+          const dx = ev.clientX - downX, dy = ev.clientY - downY;
+          if (Math.hypot(dx, dy) > 6) moved = true;
+          ghost.style.left = ev.clientX + 'px';
+          ghost.style.top = ev.clientY + 'px';
+          const r = machineRect();
+          const over = pointInRect(ev.clientX, ev.clientY, r);
+          machine.classList.toggle('drop-active', over);
+        }
+        function onUp(ev) {
+          chip.releasePointerCapture(e.pointerId);
+          chip.removeEventListener('pointermove', onMove);
+          chip.removeEventListener('pointerup', onUp);
+          ghost.remove();
+          chip.classList.remove('dragging');
+          machine.classList.remove('drop-active');
+
+          const r = machineRect();
+          const droppedOnMachine = pointInRect(ev.clientX, ev.clientY, r);
+          if (droppedOnMachine || !moved) {
+            solve(chip);
+          }
+        }
+        chip.addEventListener('pointermove', onMove);
+        chip.addEventListener('pointerup', onUp);
+      });
+
+      chip.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); solve(chip); }
+      });
+    });
+  }
+
+  /* =========================================================
+     QR BUSINESS CARD
      ========================================================= */
   const cardOverlay = document.getElementById('cardOverlay');
   const flipCard = document.getElementById('flipCard');
   const cardClose = document.getElementById('cardClose');
   const qrImage = document.getElementById('qrImage');
   const saveContactBtn = document.getElementById('saveContactBtn');
-  const openers = [
-    document.getElementById('cardToggle'),
-    document.getElementById('heroCardBtn'),
-    document.getElementById('ctaCardBtn'),
-  ].filter(Boolean);
+  const openers = [document.getElementById('cardToggle'), document.getElementById('ctaCardBtn')].filter(Boolean);
 
   if (cardOverlay && flipCard) {
     const qrData = encodeURIComponent(CONTACTS.whatsapp);
     if (qrImage) {
-      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=440x440&margin=0&data=${qrData}`;
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=0&data=${qrData}`;
     }
-
     if (saveContactBtn) {
       const vcard = [
         'BEGIN:VCARD',
@@ -218,8 +324,6 @@
     cardOverlay.addEventListener('click', (e) => { if (e.target === cardOverlay) closeCard(); });
     flipCard.addEventListener('click', () => flipCard.classList.toggle('flipped'));
     flipCard.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => e.stopPropagation()));
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeCard();
-    });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCard(); });
   }
 })();
