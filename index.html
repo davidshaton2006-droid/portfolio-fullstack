@@ -27,14 +27,21 @@
   <nav class="main-nav">
     <a href="#about" data-magnetic><i>01</i>обо мне</a>
     <a href="#machine" data-magnetic><i>02</i>машина</a>
-    <a href="#projects" data-magnetic><i>03</i>проекты</a>
-    <a href="#process" data-magnetic><i>04</i>процесс</a>
-    <a href="#contact" data-magnetic><i>05</i>контакты</a>
+    <a href="#audit" data-magnetic><i>03</i>разбор</a>
+    <a href="#projects" data-magnetic><i>04</i>проекты</a>
+    <a href="#process" data-magnetic><i>05</i>процесс</a>
+    <a href="#contact" data-magnetic><i>06</i>контакты</a>
   </nav>
-  <button class="card-toggle" id="cardToggle" data-magnetic>
-    <span class="card-toggle-icon" aria-hidden="true">▦</span>
-    <span>визитка</span>
-  </button>
+  <div class="header-actions">
+    <button class="sound-toggle" id="soundToggle" data-magnetic aria-pressed="false" title="Звук интерфейса">
+      <svg class="icon-sound-on" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 4V5L8 9H4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M17 8.5a5 5 0 0 1 0 7M19.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <svg class="icon-sound-off" viewBox="0 0 24 24" fill="none"><path d="M4 9v6h4l5 4V5L8 9H4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M17 9l4.5 6M21.5 9 17 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <button class="card-toggle" id="cardToggle" data-magnetic>
+      <span class="card-toggle-icon" aria-hidden="true">▦</span>
+      <span>визитка</span>
+    </button>
+  </div>
 </header>
 
 <!-- ============ HERO ============ -->
@@ -68,6 +75,17 @@
     <span>#авито</span><span>#pwa</span><span>#яндекс.директ</span><span>#seo</span>
     <span>#telegram-боты</span><span>#crm</span><span>#контент</span><span>#автоматизация</span>
   </div>
+</section>
+
+<!-- ============ MANIFEST ============ -->
+<section class="manifest" aria-label="Принципы работы">
+  <span class="manifest-stamp">УТВЕРЖДЕНО<br>Д.Ш.</span>
+  <ol class="manifest-list">
+    <li><span class="manifest-num">01</span><p>Один договор. Один человек. Один результат.</p></li>
+    <li><span class="manifest-num">02</span><p>Я не продаю воронки — я строю системы, которые работают <em>без меня</em>.</p></li>
+    <li><span class="manifest-num">03</span><p>Разбираюсь в нише <em>до</em> того, как предложить решение — а не после.</p></li>
+    <li><span class="manifest-num">04</span><p>Если не сработало — разбираюсь, почему. А не переключаюсь на следующего клиента.</p></li>
+  </ol>
 </section>
 
 <!-- ============ ABOUT ============ -->
@@ -153,6 +171,9 @@
 
     <div class="results-tray" id="resultsTray">
       <p class="results-placeholder" id="resultsPlaceholder">решения будут появляться здесь →</p>
+      <button class="btn btn-ghost download-tz-btn" id="downloadTzBtn" data-magnetic hidden>
+        Скачать ТЗ по вашим ответам <span class="kbd">⇩</span>
+      </button>
     </div>
   </div>
 
@@ -162,10 +183,73 @@
   </p>
 </section>
 
+<!-- ============ NICHE AUDIT QUIZ ============ -->
+<section class="section audit" id="audit">
+  <div class="section-head">
+    <span class="section-index">03</span>
+    <h2>Экспресс-разбор вашей ниши</h2>
+  </div>
+  <p class="audit-intro">4 коротких вопроса — в конце получите персональную рекомендацию, а не общие слова. Можно сразу отправить её мне в Telegram.</p>
+
+  <div class="audit-card">
+    <div class="audit-progress" id="auditProgress">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="audit-step" data-step="0">
+      <h3 class="audit-question">В какой сфере работаете?</h3>
+      <div class="audit-options">
+        <button class="audit-opt" data-q="niche" data-v="services">Услуги / локальный бизнес</button>
+        <button class="audit-opt" data-q="niche" data-v="ecom">Товары / e-commerce</button>
+        <button class="audit-opt" data-q="niche" data-v="realty">Недвижимость / B2B</button>
+        <button class="audit-opt" data-q="niche" data-v="other">Другое</button>
+      </div>
+    </div>
+
+    <div class="audit-step" data-step="1" hidden>
+      <h3 class="audit-question">Что сейчас работает хуже всего?</h3>
+      <div class="audit-options">
+        <button class="audit-opt" data-q="pain" data-v="clients">Нет клиентов</button>
+        <button class="audit-opt" data-q="pain" data-v="site">Сайта нет или он устарел</button>
+        <button class="audit-opt" data-q="pain" data-v="crm">Заявки теряются</button>
+        <button class="audit-opt" data-q="pain" data-v="smm">Соцсети заброшены</button>
+      </div>
+    </div>
+
+    <div class="audit-step" data-step="2" hidden>
+      <h3 class="audit-question">Сколько уже вложено в маркетинг?</h3>
+      <div class="audit-options">
+        <button class="audit-opt" data-q="stage" data-v="none">Ничего ещё не пробовал</button>
+        <button class="audit-opt" data-q="stage" data-v="tried">Пробовал разово, без системы</button>
+        <button class="audit-opt" data-q="stage" data-v="unhappy">Работаю с кем-то, но не доволен</button>
+      </div>
+    </div>
+
+    <div class="audit-step" data-step="3" hidden>
+      <h3 class="audit-question">Какая скорость нужна?</h3>
+      <div class="audit-options">
+        <button class="audit-opt" data-q="speed" data-v="fast">Нужно быстро, горит</button>
+        <button class="audit-opt" data-q="speed" data-v="system">Есть время выстроить системно</button>
+      </div>
+    </div>
+
+    <div class="audit-result" id="auditResult" hidden>
+      <span class="audit-result-tag">// персональный разбор</span>
+      <p class="audit-result-text" id="auditResultText"></p>
+      <div class="audit-result-actions">
+        <a class="btn btn-primary" id="auditSendBtn" target="_blank" rel="noopener">
+          Отправить в Telegram <span class="arrow">→</span>
+        </a>
+        <button class="btn btn-ghost" id="auditRestartBtn">Пройти заново</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PROJECTS ============ -->
 <section class="section projects" id="projects">
   <div class="section-head">
-    <span class="section-index">03</span>
+    <span class="section-index">04</span>
     <h2>Проекты</h2>
   </div>
   <div class="projects-list">
@@ -227,7 +311,7 @@
 <!-- ============ PROCESS ============ -->
 <section class="section process" id="process">
   <div class="section-head">
-    <span class="section-index">04</span>
+    <span class="section-index">05</span>
     <h2>Как строится работа</h2>
   </div>
   <ol class="process-list">
@@ -242,7 +326,7 @@
 <!-- ============ NICHES ============ -->
 <section class="section niches">
   <div class="section-head">
-    <span class="section-index">05</span>
+    <span class="section-index">06</span>
     <h2>Ниши, с которыми работал</h2>
   </div>
   <div class="niche-cloud">
@@ -261,7 +345,7 @@
 <!-- ============ CONTACT ============ -->
 <section class="section contact" id="contact">
   <div class="section-head">
-    <span class="section-index">06</span>
+    <span class="section-index">07</span>
     <h2>Связаться</h2>
   </div>
   <p class="contact-lead">Опишите задачу — отвечу и предложу, с чего начать. Быстрее всего — в Telegram или WhatsApp.</p>
@@ -362,6 +446,26 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ============ PRINTABLE TZ (used only by window.print) ============ -->
+<div id="printSheet" class="print-sheet" aria-hidden="true">
+  <header>
+    <h1>Техническое задание</h1>
+    <p>Сформировано на сайте davidshaton2006-droid.github.io/portfolio-fullstack</p>
+  </header>
+  <section>
+    <h2>Проблемы клиента</h2>
+    <ol id="printProblems"></ol>
+  </section>
+  <section>
+    <h2>Предлагаемые решения</h2>
+    <ol id="printSolutions"></ol>
+  </section>
+  <footer>
+    <p><strong>Давид Шатон</strong> — маркетолог и разработчик полного цикла</p>
+    <p>Telegram: @error_090 · WhatsApp: +7 918 328-04-52</p>
+  </footer>
 </div>
 
 <script src="js/main.js"></script>

@@ -15,6 +15,62 @@
 
   const isTouch = window.matchMedia('(hover: none)').matches;
 
+  /* =========================================================
+     SOUND — tiny synthesized UI feedback (no audio files)
+     Muted by default; user opts in via the header toggle.
+     ========================================================= */
+  const Sound = (() => {
+    let ctx = null;
+    let enabled = localStorage.getItem('ds_sound') === 'on';
+
+    function ensureCtx() {
+      if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    }
+
+    function tone({ freq = 440, duration = 0.12, type = 'sine', gain = 0.06, glideTo = null }) {
+      if (!enabled) return;
+      try {
+        const c = ensureCtx();
+        const osc = c.createOscillator();
+        const g = c.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, c.currentTime);
+        if (glideTo) osc.frequency.exponentialRampToValueAtTime(glideTo, c.currentTime + duration);
+        g.gain.setValueAtTime(gain, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + duration);
+        osc.connect(g).connect(c.destination);
+        osc.start();
+        osc.stop(c.currentTime + duration);
+      } catch (e) { /* audio unsupported — silently no-op */ }
+    }
+
+    function vibrate(ms) {
+      if (enabled && navigator.vibrate) navigator.vibrate(ms);
+    }
+
+    return {
+      isEnabled: () => enabled,
+      setEnabled(v) { enabled = v; localStorage.setItem('ds_sound', v ? 'on' : 'off'); },
+      click() { tone({ freq: 320, duration: 0.06, type: 'square', gain: 0.04 }); },
+      clunk() { tone({ freq: 180, duration: 0.18, type: 'square', gain: 0.07, glideTo: 90 }); vibrate(20); },
+      ding() { tone({ freq: 880, duration: 0.22, type: 'triangle', gain: 0.06, glideTo: 1200 }); vibrate([10, 30, 10]); },
+      flip() { tone({ freq: 240, duration: 0.14, type: 'sine', gain: 0.05, glideTo: 480 }); vibrate(15); },
+    };
+  })();
+
+  const soundToggle = document.getElementById('soundToggle');
+  if (soundToggle) {
+    soundToggle.setAttribute('aria-pressed', String(Sound.isEnabled()));
+    soundToggle.addEventListener('click', () => {
+      const next = !Sound.isEnabled();
+      Sound.setEnabled(next);
+      soundToggle.setAttribute('aria-pressed', String(next));
+      if (next) Sound.ding();
+    });
+  }
+
   /* ---------------- custom cursor ---------------- */
   const dot = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
@@ -146,7 +202,7 @@
   drawGrid();
 
   /* ---------------- scroll reveal ---------------- */
-  const revealTargets = document.querySelectorAll('.project-row, .stat, .process-list li, .chip, .contact-card');
+  const revealTargets = document.querySelectorAll('.project-row, .stat, .process-list li, .chip, .contact-card, .manifest-list li, .audit-card');
   revealTargets.forEach((el) => { el.style.opacity = 0; el.style.transform += ' translateY(24px)'; el.style.transition = 'opacity .6s ease, transform .6s ease'; });
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -176,12 +232,13 @@
      physical-machine metaphor needs no explanation for anyone.
      ========================================================= */
   const SOLUTIONS = {
-    clients: { text: 'Настрою трафик: Директ + Авито + SEO' },
-    site: { text: 'Соберу новый сайт или PWA под задачу' },
-    crm: { text: 'Внедрю CRM, автоответы и аналитику' },
-    smm: { text: 'Упакую контент: Reels, карусели, посты' },
-    start: { text: 'Бесплатно разберу нишу и дам план' },
+    clients: { problem: 'Нет клиентов', text: 'Настрою трафик: Директ + Авито + SEO' },
+    site: { problem: 'Сайт старый или его нет', text: 'Соберу новый сайт или PWA под задачу' },
+    crm: { problem: 'Заявки теряются', text: 'Внедрю CRM, автоответы и аналитику' },
+    smm: { problem: 'Соцсети заброшены', text: 'Упакую контент: Reels, карусели, посты' },
+    start: { problem: 'Не знаю, с чего начать', text: 'Бесплатно разберу нишу и дам план' },
   };
+  const solvedItems = [];
 
   const chipsTray = document.getElementById('chipsTray');
   const machine = document.getElementById('machine');
@@ -190,6 +247,7 @@
   const resultsTray = document.getElementById('resultsTray');
   const resultsPlaceholder = document.getElementById('resultsPlaceholder');
   const machineDone = document.getElementById('machineDone');
+  const downloadTzBtn = document.getElementById('downloadTzBtn');
 
   if (chipsTray && machine) {
     machineLight.classList.add('idle');
@@ -212,17 +270,22 @@
       machineBody.classList.add('processing');
       machineLight.classList.remove('idle');
       machineLight.classList.add('busy');
+      Sound.clunk();
 
       setTimeout(() => {
         machineBody.classList.remove('processing');
         machineLight.classList.remove('busy');
         machineLight.classList.add('idle');
+        Sound.ding();
 
         if (resultsPlaceholder) resultsPlaceholder.remove();
         const result = document.createElement('div');
         result.className = 'result-chip';
         result.innerHTML = `<span class="tick">✓</span><span>${solution.text}</span>`;
-        resultsTray.appendChild(result);
+        resultsTray.insertBefore(result, downloadTzBtn);
+
+        solvedItems.push(solution);
+        if (downloadTzBtn) downloadTzBtn.hidden = false;
 
         const remaining = chipsTray.querySelectorAll('.chip:not(.solved)').length;
         if (remaining === 0 && machineDone) {
@@ -281,6 +344,17 @@
     });
   }
 
+  /* ---------------- downloadable TZ from the machine ---------------- */
+  if (downloadTzBtn) {
+    downloadTzBtn.addEventListener('click', () => {
+      const printProblems = document.getElementById('printProblems');
+      const printSolutions = document.getElementById('printSolutions');
+      printProblems.innerHTML = solvedItems.map((s) => `<li>${s.problem}</li>`).join('');
+      printSolutions.innerHTML = solvedItems.map((s) => `<li>${s.text}</li>`).join('');
+      window.print();
+    });
+  }
+
   /* =========================================================
      QR BUSINESS CARD
      ========================================================= */
@@ -322,8 +396,87 @@
     openers.forEach((btn) => btn.addEventListener('click', openCard));
     cardClose.addEventListener('click', closeCard);
     cardOverlay.addEventListener('click', (e) => { if (e.target === cardOverlay) closeCard(); });
-    flipCard.addEventListener('click', () => flipCard.classList.toggle('flipped'));
+    flipCard.addEventListener('click', () => { flipCard.classList.toggle('flipped'); Sound.flip(); });
     flipCard.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => e.stopPropagation()));
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCard(); });
+  }
+
+  /* =========================================================
+     NICHE AUDIT — express quiz -> personal recommendation
+     ========================================================= */
+  const auditCard = document.querySelector('.audit-card');
+  if (auditCard) {
+    const steps = Array.from(auditCard.querySelectorAll('.audit-step'));
+    const progressDots = Array.from(document.getElementById('auditProgress').children);
+    const resultBox = document.getElementById('auditResult');
+    const resultText = document.getElementById('auditResultText');
+    const sendBtn = document.getElementById('auditSendBtn');
+    const restartBtn = document.getElementById('auditRestartBtn');
+    const answers = {};
+    let stepIndex = 0;
+
+    function updateProgress() {
+      progressDots.forEach((dot, i) => {
+        dot.classList.toggle('done', i < stepIndex);
+        dot.classList.toggle('active', i === stepIndex);
+      });
+    }
+
+    function showStep(i) {
+      steps.forEach((s, idx) => { s.hidden = idx !== i; });
+      resultBox.hidden = true;
+      updateProgress();
+    }
+
+    const NICHE_LABEL = { services: 'услуги и локальный бизнес', ecom: 'товары и e-commerce', realty: 'недвижимость и B2B', other: 'вашу нишу' };
+    const PAIN_CHANNEL = {
+      clients: 'связку Яндекс Директ + Авито + SEO, с упором на быстрые заявки',
+      site: 'новый сайт или PWA — без него трафик просто некуда вести',
+      crm: 'CRM с автоответами и аналитикой, чтобы ни одна заявка не терялась',
+      smm: 'контент-план и упаковку соцсетей: Reels, карусели, регулярные посты',
+    };
+
+    function buildRecommendation() {
+      const niche = NICHE_LABEL[answers.niche] || 'вашу нишу';
+      const channel = PAIN_CHANNEL[answers.pain] || 'разбор текущей воронки';
+      let stagePart = '';
+      if (answers.stage === 'none') stagePart = 'Раз ещё ничего не пробовали — начнём с малого теста, чтобы не тратить бюджет вслепую.';
+      if (answers.stage === 'tried') stagePart = 'Раз разовые попытки уже были — сразу выстроим систему, а не ещё один разовый всплеск.';
+      if (answers.stage === 'unhappy') stagePart = 'Если текущий подрядчик не устраивает — начну с честного аудита того, что сделано, и покажу, что чинить в первую очередь.';
+      const speedPart = answers.speed === 'fast'
+        ? 'Раз горит — предложу быстрый первый шаг на 1-2 недели, который даст результат уже сейчас.'
+        : 'Раз есть время — соберём план на 2-3 месяца с постепенным ростом без резких скачков бюджета.';
+
+      return `Для ниши «${niche}» с задачей «${channel}» я бы начал с этого. ${stagePart} ${speedPart}`;
+    }
+
+    steps.forEach((step) => {
+      step.querySelectorAll('.audit-opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          answers[opt.dataset.q] = opt.dataset.v;
+          Sound.click();
+          if (stepIndex < steps.length - 1) {
+            stepIndex++;
+            showStep(stepIndex);
+          } else {
+            steps.forEach((s) => { s.hidden = true; });
+            const text = buildRecommendation();
+            resultText.textContent = text;
+            sendBtn.href = `https://t.me/error_090?text=${encodeURIComponent('Прошёл разбор на сайте:\n\n' + text + '\n\nХочу обсудить.')}`;
+            resultBox.hidden = false;
+            progressDots.forEach((dot) => dot.classList.add('done'));
+            Sound.ding();
+          }
+        });
+      });
+    });
+
+    restartBtn.addEventListener('click', () => {
+      Object.keys(answers).forEach((k) => delete answers[k]);
+      stepIndex = 0;
+      showStep(0);
+    });
+
+    showStep(0);
   }
 })();
