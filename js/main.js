@@ -16,6 +16,51 @@
   const isTouch = window.matchMedia('(hover: none)').matches;
 
   /* =========================================================
+     THEME — light / dark toggle, persisted, system-aware
+     (initial theme is already applied by the inline head script
+     to avoid a flash; this just wires up the toggle button)
+     ========================================================= */
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('ds_theme', next); } catch (e) {}
+    });
+  }
+
+  /* =========================================================
+     MOBILE NAV DRAWER
+     ========================================================= */
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const mobileDrawerBackdrop = document.getElementById('mobileDrawerBackdrop');
+  if (hamburgerBtn && mobileDrawer) {
+    function openDrawer() {
+      mobileDrawer.classList.add('open');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+      mobileDrawer.classList.remove('open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = mobileDrawer.classList.contains('open');
+      isOpen ? closeDrawer() : openDrawer();
+    });
+    mobileDrawerBackdrop.addEventListener('click', closeDrawer);
+    mobileDrawer.querySelectorAll('.mobile-drawer-link, .mobile-drawer-actions a').forEach((el) => {
+      el.addEventListener('click', closeDrawer);
+    });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+  }
+
+  /* =========================================================
      SOUND — tiny synthesized UI feedback (no audio files)
      Muted by default; user opts in via the header toggle.
      ========================================================= */
@@ -156,8 +201,19 @@
   }
   resize();
 
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
   function drawGrid() {
-    ctx.fillStyle = '#0a121d';
+    const dark = isDark();
+    const bg = dark ? '#0a0b0d' : '#ffffff';
+    const accentRGB = dark ? '95,176,255' : '47,111,237';
+    const lineMajor = dark ? 0.09 : 0.05;
+    const lineMinor = dark ? 0.04 : 0.022;
+    const scanAlpha = dark ? 0.05 : 0.02;
+
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
     parallax.tx += (parallax.mx - parallax.tx) * 0.04;
@@ -171,7 +227,7 @@
 
     let col = 0;
     for (let x = -offX; x < W + GRID; x += GRID, col++) {
-      ctx.strokeStyle = col % 5 === 0 ? 'rgba(79,184,255,0.10)' : 'rgba(79,184,255,0.045)';
+      ctx.strokeStyle = `rgba(${accentRGB},${col % 5 === 0 ? lineMajor : lineMinor})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(x, -20);
@@ -180,7 +236,7 @@
     }
     let row = 0;
     for (let y = -offY; y < H + GRID; y += GRID, row++) {
-      ctx.strokeStyle = row % 5 === 0 ? 'rgba(79,184,255,0.10)' : 'rgba(79,184,255,0.045)';
+      ctx.strokeStyle = `rgba(${accentRGB},${row % 5 === 0 ? lineMajor : lineMinor})`;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(-20, y);
@@ -191,9 +247,9 @@
 
     scanY = (scanY + 0.55) % (H + 200);
     const grad = ctx.createLinearGradient(0, scanY - 100, 0, scanY + 100);
-    grad.addColorStop(0, 'rgba(79,184,255,0)');
-    grad.addColorStop(0.5, 'rgba(79,184,255,0.05)');
-    grad.addColorStop(1, 'rgba(79,184,255,0)');
+    grad.addColorStop(0, `rgba(${accentRGB},0)`);
+    grad.addColorStop(0.5, `rgba(${accentRGB},${scanAlpha})`);
+    grad.addColorStop(1, `rgba(${accentRGB},0)`);
     ctx.fillStyle = grad;
     ctx.fillRect(0, scanY - 100, W, 200);
 
@@ -241,7 +297,7 @@
   const solvedItems = [];
 
   const chipsTray = document.getElementById('chipsTray');
-  const machine = document.getElementById('machine');
+  const machine = document.getElementById('machineBox');
   const machineBody = document.getElementById('machineBody');
   const machineLight = document.getElementById('machineLight');
   const resultsTray = document.getElementById('resultsTray');
